@@ -159,8 +159,11 @@ def event_handle(event):
             replyObj = TextSendMessage(text="ไปดิ")
             line_bot_api.reply_message(rtoken, replyObj)
         else :
-            replyObj = TextSendMessage(text=msg)
-            line_bot_api.reply_message(rtoken, replyObj)
+            headers = request.headers
+            json_headers = ({k:v for k, v in headers.items()})
+            json_headers.update({'Host':'dialogflow.cloud.google.com'})
+            url = "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/292c5283-5c6d-4387-adb9-b52ae99ecb3f"
+            requests.post(url,data=json_line, headers=json_headers)
     elif msgType == "image":
         try:
             message_content = line_bot_api.get_message_content(event['message']['id'])
